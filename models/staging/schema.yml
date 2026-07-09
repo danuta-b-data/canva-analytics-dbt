@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_users
+    description: "Cleaned and standardized user data. Source: raw_users seed."
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        description: "User email address (lowercase)"
+        tests:
+          - not_null
+      - name: plan_type
+        description: "Subscription plan type: free, pro, or enterprise"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['free', 'pro', 'enterprise']
+      - name: country_code
+        description: "ISO 2-letter country code (uppercase)"
+        tests:
+          - not_null
+
+  - name: stg_events
+    description: "Cleaned user event data. Source: raw_events seed."
+    columns:
+      - name: event_id
+        description: "Unique identifier for each event"
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        description: "Reference to the user who triggered the event"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_users')
+              field: user_id
+      - name: event_type
+        description: "Type of event performed by the user"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['signed_up', 'created_design', 'exported_design', 'invited_team_member', 'upgraded_plan', 'deleted_design', 'shared_design']
+      - name: event_date
+        description: "Date when the event occurred"
+        tests:
+          - not_null
