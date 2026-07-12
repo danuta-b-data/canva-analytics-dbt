@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: int_user_activity
+    description: "Per-user aggregation of event counts and activity dates."
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_user_funnel
+    description: "Funnel stage classification based on user events."
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - unique
+          - not_null
+      - name: funnel_stage
+        description: "Highest funnel stage reached by the user"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['0_no_activity', '1_signed_up', '2_created_design', '3_exported', '4_invited_team', '5_upgraded']
+
+  - name: int_retention_cohorts
+    description: "Monthly retention cohort analysis. Shows how many users return each month after signup."
+    columns:
+      - name: cohort_month
+        description: "Month when the cohort of users signed up"
+        tests:
+          - not_null
+      - name: months_since_signup
+        description: "Number of months since the cohort signed up"
+        tests:
+          - not_null
+      - name: retention_rate_pct
+        description: "Percentage of cohort retained in a given month"
+        tests:
+          - not_null
+
+  - name: int_time_to_first_value
+    description: "Days from signup to first design created per user."
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - unique
+          - not_null
+      - name: activation_segment
+        description: "Activation speed segment: same_day, within_1_week, within_1_month, after_1_month, never_activated"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['same_day', 'within_1_week', 'within_1_month', 'after_1_month', 'never_activated']
+
+  - name: int_events_enriched
+    description: "Events joined with user attributes (plan type, country)."
+    columns:
+      - name: event_id
+        description: "Unique identifier for each event"
+        tests:
+          - unique
+          - not_null
+
+  - name: int_dau_mau
+    description: "Daily and monthly active user counts with DAU/MAU ratio."
+    columns:
+      - name: event_date
+        description: "Date of activity"
+        tests:
+          - unique
+          - not_null

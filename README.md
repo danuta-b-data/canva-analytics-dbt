@@ -1,4 +1,4 @@
-# Canva Analytics — dbt Engineering Project
+# Canva Analytics - dbt Engineering Project
 
 An analytics engineering project simulating a SaaS product analytics pipeline,
 built with dbt and DuckDB. Inspired by the data challenges faced by product 
@@ -15,39 +15,50 @@ raw event data → cleaned staging models → business logic → analytics-ready
 
 ## Tech Stack
 
-- **dbt-core** 1.11 — data transformation and modelling
-- **DuckDB** — local analytical database
-- **Python** — synthetic data generation
+- **dbt-core** 1.11 - data transformation and modelling
+- **DuckDB** - local analytical database
+- **Python** - synthetic data generation
 
 ## Project Structure
 
 models/
 
-├── staging/          # Raw data cleaning and standardization
+├── staging/              # Raw data cleaning and standardization
 
-│   ├── stg_users     # 1,000 users with plan and country data
+│   ├── stg_users         # 1,000 users with plan and country data
 
-│   └── stg_events    # 6,967 user events (designs, exports, invites)
+│   └── stg_events        # 6,967 user events across 7 event types
 
-├── intermediate/     # Business logic layer
+├── intermediate/         # Business logic layer
 
-│   ├── int_user_activity         # Per-user event aggregations
+│   ├── int_user_activity        # Per-user event aggregations
 
-│   ├── int_user_funnel           # Funnel stage classification
+│   ├── int_user_funnel          # Funnel stage classification
 
-│   ├── int_retention_cohorts     # Monthly retention cohort analysis
+│   ├── int_retention_cohorts    # Monthly retention cohort analysis
 
-│   └── int_time_to_first_value   # Days from signup to first design
+│   ├── int_time_to_first_value  # Days from signup to first design
 
-└── marts/            # Analytics-ready tables for stakeholders
+│   ├── int_events_enriched      # Events joined with user attributes
 
-├── mart_user_summary         # Full user profile with engagement tier
+│   └── int_dau_mau              # Daily and monthly active user counts
 
-├── mart_funnel_overview      # Funnel conversion rates
+└── marts/                # Analytics-ready tables for stakeholders
 
-├── mart_dau_mau              # Daily and monthly active users
+├── mart_user_summary          # Full user profile with engagement tier
 
-└── mart_events_incremental   # Incremental event processing
+├── mart_funnel_overview       # Funnel conversion rates
+
+├── mart_retention_cohorts     # Monthly retention rates by cohort
+
+├── mart_time_to_first_value   # Activation segments by user
+
+├── mart_dau_mau               # DAU/MAU ratio over time
+
+└── mart_events_incremental    # Incremental event processing (optimized)
+macros/
+
+└── classify_engagement.sql   # Reusable engagement tier classification
 
 ## Key Metrics Modelled
 
@@ -59,10 +70,20 @@ models/
 
 ## Data Quality
 
-13 automated tests across all staging models:
+45 automated tests across all model layers:
+
+**Staging**
 - `unique` and `not_null` on all primary keys
 - `accepted_values` on plan types and event types
 - `relationships` integrity between events and users
+
+**Intermediate**
+- `unique` and `not_null` on primary keys
+- `accepted_values` on funnel stages and activation segments
+
+**Marts**
+- `unique` and `not_null` on all primary keys
+- `accepted_values` on engagement tiers and conversion rates
 
 ## How to Run
 

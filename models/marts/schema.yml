@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: mart_user_summary
+    description: "Full user profile with engagement tier and funnel stage. Primary table for user-level analysis."
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - unique
+          - not_null
+      - name: engagement_tier
+        description: "User engagement level: inactive, low, medium, high"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['inactive', 'low', 'medium', 'high']
+
+  - name: mart_funnel_overview
+    description: "Funnel conversion rates from signup to upgrade."
+    columns:
+      - name: funnel_stage
+        description: "Funnel stage name"
+        tests:
+          - unique
+          - not_null
+      - name: conversion_rate_pct
+        description: "Percentage of users who reached this stage"
+        tests:
+          - not_null
+
+  - name: mart_retention_cohorts
+    description: "Monthly retention rates by signup cohort. Ready for dashboard consumption."
+    columns:
+      - name: cohort_month
+        description: "Month when the cohort signed up"
+        tests:
+          - not_null
+      - name: retention_rate_pct
+        description: "Percentage of cohort retained"
+        tests:
+          - not_null
+
+  - name: mart_time_to_first_value
+    description: "Activation segments showing how quickly users created their first design."
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - unique
+          - not_null
+
+  - name: mart_dau_mau
+    description: "Daily active users, monthly active users and DAU/MAU ratio over time."
+    columns:
+      - name: event_date
+        description: "Date of activity"
+        tests:
+          - unique
+          - not_null
+
+  - name: mart_events_incremental
+    description: "Enriched event table with incremental materialization for scalable processing."
+    columns:
+      - name: event_id
+        description: "Unique identifier for each event"
+        tests:
+          - unique
+          - not_null
