@@ -23,7 +23,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['0_no_activity', '1_signed_up', '2_created_design', '3_exported', '4_invited_team', '5_upgraded']
+              values: ['No Activity', 'Signed Up', 'Created Design', 'Exported Design', 'Invited Team Member', 'Upgraded Plan']
 
   - name: int_retention_cohorts
     description: "Monthly retention cohort analysis. Shows how many users return each month after signup."

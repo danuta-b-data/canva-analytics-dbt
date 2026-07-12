@@ -27,13 +27,13 @@ with_stage as (
         did_export_design,
         did_invite_team,
         did_upgrade,
-        case
-            when did_upgrade = 1        then '5_upgraded'
-            when did_invite_team = 1    then '4_invited_team'
-            when did_export_design = 1  then '3_exported'
-            when did_create_design = 1  then '2_created_design'
-            when did_signup = 1         then '1_signed_up'
-            else '0_no_activity'
+         case
+            when did_upgrade = 1        then 'Upgraded Plan'
+            when did_invite_team = 1    then 'Invited Team Member'
+            when did_export_design = 1  then 'Exported Design'
+            when did_create_design = 1  then 'Created Design'
+            when did_signup = 1         then 'Signed Up'
+            else 'No Activity'
         end                             as funnel_stage
     from funnel
 )
